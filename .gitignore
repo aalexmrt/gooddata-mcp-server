@@ -1,0 +1,49 @@
+# Environment
+.env
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Exports output
+exports/
+
+# Scripts output (may contain org data)
+scripts/*.json
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Workspace-specific documentation (may contain client data)
+.claude/workspaces/
+
+# OS
+.DS_Store
+Thumbs.db
