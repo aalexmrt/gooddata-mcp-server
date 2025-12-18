@@ -35,6 +35,9 @@ wheels/
 # Exports output
 exports/
 
+# Customer-specific documentation (contains client data)
+.customer/
+
 # Scripts output (may contain org data)
 scripts/*.json
 
@@ -47,3 +50,6 @@ scripts/*.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Backup files
+backups/
