@@ -126,26 +126,3 @@ def get_insight_data(
         }
 
 
-def ai_chat(
-    question: str,
-    workspace_id: str | None = None,
-    reset_history: bool = False,
-) -> str:
-    """Ask a natural language question about your data.
-
-    Args:
-        question: The question to ask.
-        workspace_id: Optional workspace ID override.
-        reset_history: If True, reset chat history before asking.
-
-    Returns:
-        AI response text.
-    """
-    sdk = get_sdk()
-    ws_id = get_workspace_id(workspace_id)
-
-    if reset_history:
-        sdk.compute.reset_ai_chat_history(ws_id)
-
-    response = sdk.compute.ai_chat(ws_id, question)
-    return response.text_response

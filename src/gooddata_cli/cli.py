@@ -179,21 +179,6 @@ def get_insight(insight_id: str, workspace: str | None, as_json: bool):
         sys.exit(1)
 
 
-@main.command("chat")
-@click.argument("question")
-@click.option("-w", "--workspace", help="Workspace ID")
-@click.option("--reset", is_flag=True, help="Reset chat history before asking")
-def ai_chat(question: str, workspace: str | None, reset: bool):
-    """Ask a natural language question about your data (AI-powered)."""
-    try:
-        response = query.ai_chat(question, workspace, reset_history=reset)
-        console.print(response)
-
-    except Exception as e:
-        console.print(f"[red]Error:[/red] {e}")
-        sys.exit(1)
-
-
 # ============================================================================
 # Export Commands
 # ============================================================================
