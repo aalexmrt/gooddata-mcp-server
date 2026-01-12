@@ -15,7 +15,7 @@ Do not attempt to use this project for write operations (creating workspaces, mo
 
 1. Activate the virtual environment:
    ```bash
-   cd /Users/alexmartinez/stackless_ws/gooddata-sdk
+   cd /Users/alexmartinez/stackless_ws/gooddata-mcp-server
    source .venv/bin/activate
    ```
 
