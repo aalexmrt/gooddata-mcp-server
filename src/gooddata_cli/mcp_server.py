@@ -976,19 +976,23 @@ def preview_remove_duplicate_metrics(
                     local_id = measure.get("localIdentifier")
                     metric_title = measure.get("title")
 
-                    current_metrics.append({
-                        "local_identifier": local_id,
-                        "metric_id": metric_id,
-                        "title": metric_title,
-                    })
-
-                    if metric_id in seen_metric_ids:
-                        duplicates.append({
+                    current_metrics.append(
+                        {
                             "local_identifier": local_id,
                             "metric_id": metric_id,
                             "title": metric_title,
-                            "duplicate_of": seen_metric_ids[metric_id],
-                        })
+                        }
+                    )
+
+                    if metric_id in seen_metric_ids:
+                        duplicates.append(
+                            {
+                                "local_identifier": local_id,
+                                "metric_id": metric_id,
+                                "title": metric_title,
+                                "duplicate_of": seen_metric_ids[metric_id],
+                            }
+                        )
                     else:
                         seen_metric_ids[metric_id] = local_id
 
@@ -1096,12 +1100,14 @@ def apply_remove_duplicate_metrics(
                     metric_title = measure.get("title")
 
                     if metric_id in seen_metric_ids:
-                        duplicates.append({
-                            "local_identifier": local_id,
-                            "metric_id": metric_id,
-                            "title": metric_title,
-                            "duplicate_of": seen_metric_ids[metric_id],
-                        })
+                        duplicates.append(
+                            {
+                                "local_identifier": local_id,
+                                "metric_id": metric_id,
+                                "title": metric_title,
+                                "duplicate_of": seen_metric_ids[metric_id],
+                            }
+                        )
                     else:
                         seen_metric_ids[metric_id] = local_id
 
@@ -1117,17 +1123,23 @@ def apply_remove_duplicate_metrics(
             status="error",
             details={"reason": "token_mismatch"},
         )
-        return json.dumps({
-            "success": False,
-            "error": "Invalid confirmation token. The insight may have changed since preview.",
-            "message": "Please run preview_remove_duplicate_metrics again to get a new token.",
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": False,
+                "error": "Invalid confirmation token. The insight may have changed since preview.",
+                "message": "Please run preview_remove_duplicate_metrics again to get a new token.",
+            },
+            indent=2,
+        )
 
     if not duplicates:
-        return json.dumps({
-            "success": False,
-            "error": "No duplicate metrics found to remove.",
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": False,
+                "error": "No duplicate metrics found to remove.",
+            },
+            indent=2,
+        )
 
     # Save backup BEFORE making any changes
     backup_path = _save_backup(customer_name, "visualizationObject", insight_id, data)
@@ -1138,7 +1150,8 @@ def apply_remove_duplicate_metrics(
     for bucket in buckets:
         if bucket.get("localIdentifier") == "measures":
             bucket["items"] = [
-                item for item in bucket.get("items", [])
+                item
+                for item in bucket.get("items", [])
                 if item.get("measure", {}).get("localIdentifier") not in duplicate_local_ids
             ]
 
@@ -1154,12 +1167,15 @@ def apply_remove_duplicate_metrics(
             status="error",
             details={"error": str(e), "backup_path": str(backup_path)},
         )
-        return json.dumps({
-            "success": False,
-            "error": f"Failed to update insight: {e}",
-            "backup_path": str(backup_path),
-            "message": "Backup was saved. Use restore_insight_from_backup to restore if needed.",
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": False,
+                "error": f"Failed to update insight: {e}",
+                "backup_path": str(backup_path),
+                "message": "Backup was saved. Use restore_insight_from_backup to restore if needed.",
+            },
+            indent=2,
+        )
 
     # Log successful change
     _log_audit(
@@ -1174,15 +1190,18 @@ def apply_remove_duplicate_metrics(
         },
     )
 
-    return json.dumps({
-        "success": True,
-        "insight_id": insight_id,
-        "backup_path": str(backup_path),
-        "removed_duplicates": duplicates,
-        "removed_count": len(duplicates),
-        "new_metric_count": len(seen_metric_ids),
-        "message": f"Successfully removed {len(duplicates)} duplicate metric(s). Backup saved.",
-    }, indent=2)
+    return json.dumps(
+        {
+            "success": True,
+            "insight_id": insight_id,
+            "backup_path": str(backup_path),
+            "removed_duplicates": duplicates,
+            "removed_count": len(duplicates),
+            "new_metric_count": len(seen_metric_ids),
+            "message": f"Successfully removed {len(duplicates)} duplicate metric(s). Backup saved.",
+        },
+        indent=2,
+    )
 
 
 @mcp.tool()
@@ -1217,10 +1236,13 @@ def restore_insight_from_backup(
     # Load backup file
     backup_file = Path(backup_path)
     if not backup_file.exists():
-        return json.dumps({
-            "success": False,
-            "error": f"Backup file not found: {backup_path}",
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": False,
+                "error": f"Backup file not found: {backup_path}",
+            },
+            indent=2,
+        )
 
     with open(backup_file) as f:
         backup = json.load(f)
@@ -1231,11 +1253,14 @@ def restore_insight_from_backup(
     backed_up_at = backup.get("backed_up_at")
 
     if object_type != "visualizationObject":
-        return json.dumps({
-            "success": False,
-            "error": f"Unsupported object type for restore: {object_type}",
-            "message": "Currently only visualizationObject restores are supported.",
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": False,
+                "error": f"Unsupported object type for restore: {object_type}",
+                "message": "Currently only visualizationObject restores are supported.",
+            },
+            indent=2,
+        )
 
     # Restore the object via PUT
     url = f"{host}/api/v1/entities/workspaces/{ws_id}/visualizationObjects/{object_id}"
@@ -1256,10 +1281,13 @@ def restore_insight_from_backup(
             status="error",
             details={"error": str(e), "backup_path": backup_path},
         )
-        return json.dumps({
-            "success": False,
-            "error": f"Failed to restore insight: {e}",
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": False,
+                "error": f"Failed to restore insight: {e}",
+            },
+            indent=2,
+        )
 
     # Log successful restore
     _log_audit(
@@ -1273,14 +1301,17 @@ def restore_insight_from_backup(
         },
     )
 
-    return json.dumps({
-        "success": True,
-        "object_id": object_id,
-        "object_type": object_type,
-        "restored_from": backup_path,
-        "original_backup_time": backed_up_at,
-        "message": f"Successfully restored {object_type} from backup.",
-    }, indent=2)
+    return json.dumps(
+        {
+            "success": True,
+            "object_id": object_id,
+            "object_type": object_type,
+            "restored_from": backup_path,
+            "original_backup_time": backed_up_at,
+            "message": f"Successfully restored {object_type} from backup.",
+        },
+        indent=2,
+    )
 
 
 # =============================================================================
