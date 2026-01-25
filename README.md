@@ -1,5 +1,13 @@
 # GoodData MCP Server
 
+> **⚠️ DEPRECATED**: This repository has been migrated to the [stackless-mcp monorepo](https://github.com/OxWorks/stackless-mcp).
+>
+> The new package is `stackless-gooddata` in `packages/gooddata/`.
+>
+> This repo is kept for reference only. Please use the monorepo for all new development.
+
+---
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![MCP](https://img.shields.io/badge/MCP-compatible-green.svg)](https://modelcontextprotocol.io/)
